@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~ / dashboard</title>
+    <style>
+        :root {
+            --bg0: #282828;
+            --bg1: #3c3836;
+            --fg0: #fbf1c7;
+            --fg1: #ebdbb2;
+            --fg4: #a89984;
+            --red: #cc241d;
+            --red-light: #fb4934;
+            --green: #98971a;
+            --green-light: #b8bb26;
+            --yellow: #d79921;
+            --yellow-light: #fabd2f;
+            --blue: #458588;
+            --blue-light: #83a598;
+            --purple: #b16286;
+            --purple-light: #d3869b;
+            --aqua: #689d6a;
+            --aqua-light: #8ec07c;
+            --orange: #d65d0e;
+            --orange-light: #fe8019;
+            --font-mono: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        body {
+            background-color: var(--bg0);
+            color: var(--fg1);
+            font-family: var(--font-mono);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 15px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            padding: 2rem;
+            background-color: var(--bg0);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px dashed var(--bg1);
+            padding-bottom: 1rem;
+        }
+
+        .sys-info span { margin-right: 15px; }
+        .hl-green { color: var(--green-light); }
+        .hl-blue { color: var(--blue-light); }
+        .hl-yellow { color: var(--yellow-light); }
+        .hl-purple { color: var(--purple-light); }
+
+        .search-container {
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            background-color: var(--bg1);
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+
+        .prompt {
+            color: var(--green-light);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .tilde {
+            color: var(--blue-light);
+            margin-right: 10px;
+        }
+
+        select, input {
+            background: transparent;
+            border: none;
+            color: var(--fg1);
+            font-family: var(--font-mono);
+            font-size: 16px;
+            outline: none;
+        }
+
+        select {
+            color: var(--yellow-light);
+            cursor: pointer;
+            margin-right: 10px;
+            border-right: 2px solid var(--bg0);
+            padding-right: 10px;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+        }
+        
+        select option {
+            background: var(--bg1);
+            color: var(--fg1);
+        }
+
+        input {
+            flex-grow: 1;
+        }
+        
+        input::placeholder {
+            color: var(--fg4);
+        }
+
+        /* Bookmarks Grid */
+        .bookmarks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-title {
+            color: var(--orange-light);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-transform: lowercase;
+        }
+        
+        .category-title::before {
+            content: "./";
+            color: var(--fg4);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        li::before {
+            content: "➜ ";
+            color: var(--fg4);
+            font-size: 0.8em;
+        }
+
+        a {
+            color: var(--fg1);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--aqua-light);
+            text-decoration: underline;
+            text-decoration-style: dashed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="sys-info">
+                <span class="hl-purple">local@stargate</span>
+                <span id="clock" class="hl-yellow">--:--:--</span>
+            </div>
+            <div class="sys-info" id="github-stats">
+                <span>[ fetching github data... ]</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="search-container">
+                <span class="prompt">givikuna@stargate</span>
+                <span class="tilde">~</span>
+                <form id="search-form" style="display: flex; flex-grow: 1;">
+                    <select id="engine" title="Search Engine">
+                        <option value="ddg">duckduckgo</option>
+                        <option value="brave">brave</option>
+                        <option value="google">google</option>
+                        <option value="bing">bing</option>
+                    </select>
+                    <input type="text" id="search-input" autofocus autocomplete="off" placeholder="execute search...">
+                </form>
+            </div>
+
+            <div class="bookmarks">
+                <div class="category">
+                    <div class="category-title" style="color: var(--red-light);">sysadmin</div>
+                    <ul>
+                        <li><a href="https://wiki.archlinux.org/">Arch Wiki</a></li>
+                        <li><a href="https://nixos.wiki/">NixOS Wiki</a></li>
+                        <li><a href="https://wiki.cachyos.org/">CachyOS Wiki</a></li>
+                        <li><a href="https://store.kde.org/">KDE Store</a></li>
+                        <li><a href="https://distrowatch.com/">DistroWatch</a></li>
+                        <li><a href="https://aws.amazon.com/">Amazon AWS</a></li>
+                        <li><a href="https://www.hetzner.com/">Hetzner</a></li>
+                        <li><a href="https://cloud.google.com/">Google Cloud</a></li>
+                        <li><a href="https://www.digitalocean.com/">DigitalOcean</a></li>
+                    </ul>
+                </div>
+
+                <div class="category">
+                    <div class="category-title" style="color: var(--green-light);">development</div>
+                    <ul>
+                        <li><a href="https://github.com/givikuna">GitHub</a></li>
+                        <li><a href="https://gitlab.com/">GitLab</a></li>
+                        <li><a href="https://stackoverflow.com/">Stack Overflow</a></li>
+                        <li><a href="https://devdocs.io/">DevDocs.io</a></li>
+                        <li><a href="https://sourcemaking.com/">Source Making</a></li>
+                        <li><a href="https://stackshare.io/">Stackshare</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JS Docs</a></li>
+                        <li><a href="https://www.typescriptlang.org/docs/">TS Docs</a></li>
+                        <li><a href="https://civet.dev/">Civet Docs</a></li>
+                        <li><a href="https://livescript.net/">LiveScript Docs</a></li>
+                        <li><a href="https://docs.racket-lang.org/">Racket Docs</a></li>
+                        <li><a href="https://wiki.haskell.org/Documentation">Haskell Docs</a></li>
+                        <li><a href="https://docs.oracle.com/en/java/">Java Docs</a></li>
+                        <li><a href="https://www.swi-prolog.org/pldoc/index.html">Prolog Docs</a></li>
+                        <li><a href="https://lisp-lang.org/learn/">Lisp Docs</a></li>
+                    </ul>
+                </div>
+
+                <div class="category">
+                    <div class="category-title" style="color: var(--yellow-light);">gaming</div>
+                    <ul>
+                        <li><a href="https://store.steampowered.com/">Steam</a></li>
+                        <li><a href="https://www.protondb.com/">ProtonDB</a></li>
+                        <li><a href="https://www.humblebundle.com/">Humble Bundle</a></li>
+                        <li><a href="https://wiki.warframe.com/">Warframe Wiki</a></li>
+                        <li><a href="https://warframe.market/">Warframe Market</a></li>
+                        <li><a href="https://overframe.gg/">Overframe</a></li>
+                        <li><a href="https://buff0000n.github.io/dojocad/">Warframe DojoCAD</a></li>
+                        <li><a href="https://deeprockgalactic.wiki.gg/wiki/Deep_Rock_Galactic_Wiki">DRG Wiki</a></li>
+                        <li><a href="https://nomanssky.fandom.com/wiki/No_Man%27s_Sky_Wiki">NMS Wiki</a></li>
+                        <li><a href="https://www.nexusmods.com/">NexusMods</a></li>
+                        <li><a href="https://www.curseforge.com/">Curseforge</a></li>
+                    </ul>
+                </div>
+
+                <div class="category">
+                    <div class="category-title" style="color: var(--blue-light);">workflow</div>
+                    <ul>
+                        <li><a href="https://mail.google.com/">Gmail</a></li>
+                        <li><a href="https://mail.proton.me/">ProtonMail</a></li>
+                        <li><a href="https://calendar.google.com/">Google Calendar</a></li>
+                        <li><a href="https://gemini.google.com/">Gemini</a></li>
+                        <li><a href="https://chat.openai.com/">ChatGPT</a></li>
+                        <li><a href="https://claude.ai/">Claude AI</a></li>
+                        <li><a href="https://www.overleaf.com/">Overleaf</a></li>
+                        <li><a href="https://stackedit.io/">StackEdit</a></li>
+                        <li><a href="https://physics.stackexchange.com/">Physics Stack</a></li>
+                        <li><a href="https://math.stackexchange.com/">Math Stack</a></li>
+                        <li><a href="https://libgen.is/">LibGen</a></li>
+                    </ul>
+                </div>
+
+                <div class="category">
+                    <div class="category-title" style="color: var(--purple-light);">media</div>
+                    <ul>
+                        <li><a href="https://youtube.com/">YouTube</a></li>
+                        <li><a href="https://aniwatchtv.to/">Aniwatch</a></li>
+                        <li><a href="https://hulu.com/">Hulu</a></li>
+                        <li><a href="https://netflix.com/">Netflix</a></li>
+                        <li><a href="https://reddit.com/">Reddit</a></li>
+                        <li><a href="https://reddit.com/r/unixporn">r/unixporn</a></li>
+                        <li><a href="https://news.ycombinator.com/">Hacker News</a></li>
+                        <li><a href="https://discord.com/app">Discord</a></li>
+                        <li><a href="https://instagram.com/">Instagram</a></li>
+                        <li><a href="https://facebook.com/">Facebook</a></li>
+                    </ul>
+                </div>
+
+                <div class="category">
+                    <div class="category-title" style="color: var(--aqua-light);">finance</div>
+                    <ul>
+                        <li><a href="https://www.bankofamerica.com/">BofA</a></li>
+                        <li><a href="https://www.discover.com/">Discover</a></li>
+                        <li><a href="https://www.paypal.com/">PayPal</a></li>
+                        <li><a href="https://venmo.com/">Venmo</a></li>
+                        <li><a href="https://nj.pseg.com/">PSEG</a></li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            const dateString = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            document.getElementById('clock').innerText = `[ ${dateString} ${timeString} ]`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        document.getElementById('search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = document.getElementById('search-input').value.trim();
+            const engine = document.getElementById('engine').value;
+            
+            if (!query) return;
+
+            let searchUrl = '';
+            switch (engine) {
+                case 'ddg':
+                    searchUrl = 'https://duckduckgo.com/?q=';
+                    break;
+                case 'brave':
+                    searchUrl = 'https://search.brave.com/search?q=';
+                    break;
+                case 'google':
+                    searchUrl = 'https://www.google.com/search?q=';
+                    break;
+                case 'bing':
+                    searchUrl = 'https://www.bing.com/search?q=';
+                    break;
+            }
+
+            window.location.href = searchUrl + encodeURIComponent(query);
+        });
+
+        const ghUsername = 'givikuna';
+        fetch(`https://api.github.com/users/${ghUsername}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                const repos = data.public_repos;
+                const followers = data.followers;
+                document.getElementById('github-stats').innerHTML = 
+                    `<span class="hl-blue">github</span>: ${ghUsername} | ` +
+                    `repos: <span class="hl-green">${repos}</span> | ` +
+                    `followers: <span class="hl-aqua">${followers}</span>`;
+            })
+            .catch(error => {
+                document.getElementById('github-stats').innerHTML = 
+                    `<span class="hl-red">[ github fetch failed ]</span>`;
+            });
+    </script>
+</body>
+</html>
